@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import type { TestRunSummary } from "@/lib/test-data"
 
 const SOURCE_URL =
-  process.env.TEST_RUNS_SOURCE_URL ?? "http://localhost:8080/api/testRun"
+  process.env.TEST_RUNS_SOURCE_URL ?? "http://localhost:8080/api/v1/test-runs"
 
 export async function GET(request: Request) {
   try {
