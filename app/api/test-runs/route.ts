@@ -6,6 +6,9 @@ const SOURCE_URL =
 
 export async function GET(request: Request) {
   try {
+    const sourceUrl = new URL(SOURCE_URL)
+    sourceUrl.searchParams.set("workspaceId", "1")
+
     const authorization =
       request.headers.get("authorization") ??
       (process.env.TEST_RUNS_USERNAME && process.env.TEST_RUNS_PASSWORD
@@ -14,7 +17,7 @@ export async function GET(request: Request) {
           ).toString("base64")}`
         : undefined)
 
-    const res = await fetch(SOURCE_URL, {
+    const res = await fetch(sourceUrl, {
       cache: "no-store",
       headers: authorization ? { authorization } : undefined,
     })
