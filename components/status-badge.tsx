@@ -7,11 +7,6 @@ const STYLES: Record<RunStatus, { dot: string; text: string; bg: string }> = {
     text: "text-muted-foreground",
     bg: "bg-muted",
   },
-  "In Progress": {
-    dot: "bg-blocked",
-    text: "text-foreground",
-    bg: "bg-blocked/12",
-  },
   Completed: {
     dot: "bg-pass",
     text: "text-foreground",
@@ -33,7 +28,7 @@ export function StatusBadge({ status }: { status: RunStatus }) {
         className={cn(
           "size-1.5 rounded-full",
           s.dot,
-          status === "In Progress" && "animate-pulse",
+          status === "Initiated" && "animate-pulse",
         )}
         aria-hidden="true"
       />
