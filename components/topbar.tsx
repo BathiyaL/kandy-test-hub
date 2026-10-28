@@ -124,15 +124,34 @@ export function Topbar() {
       executedUser: executedUser.trim(),
       executedAt: executedAtDate.toISOString(),
       userLogs: userLog.trim(),
-      rawJsonResult: parsedJson,
+      rawJsonResult: JSON.stringify(parsedJson),
     }
 
     // The payload is ready for POST /api/v1/test-runs/upload-raw.
     // Keep the preview local while that backend endpoint is unavailable.
     console.log("[v0] Test run upload payload:", payload)
     setPayloadPreview(payload)
-    setSuccessMessage("Payload constructed successfully. Ready for POST /api/v1/test-runs/upload-raw.")
-    setIsSubmitting(false)
+    //setSuccessMessage("Payload constructed successfully. Ready for POST /api/v1/test-runs/upload-raw.")
+    //setIsSubmitting(false)
+
+    try {
+      const response = await fetch("/api/test-runs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (response.status === 201) {
+        setSuccessMessage("Test run uploaded successfully.")
+      } else {
+        setValidationError("The test run upload was not created.")
+      }
+    } catch {
+      setValidationError("Unable to upload the test run.")
+    } finally {
+      setIsSubmitting(false)
+    }
+    
   }
 
   return (

@@ -4,6 +4,32 @@ import type { TestRunSummary } from "@/lib/test-data"
 const SOURCE_URL =
   process.env.TEST_RUNS_SOURCE_URL ?? "http://localhost:8080/api/v1/test-runs"
 
+export async function POST(request: Request) {
+  const payload = await request.text()
+      const authorization =
+      request.headers.get("authorization") ??
+      (process.env.TEST_RUNS_USERNAME && process.env.TEST_RUNS_PASSWORD
+        ? `Basic ${Buffer.from(
+            `${process.env.TEST_RUNS_USERNAME}:${process.env.TEST_RUNS_PASSWORD}`,
+          ).toString("base64")}`
+        : undefined)
+
+  const response = await fetch("http://localhost:8080/api/v1/test-runs/upload-raw", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(authorization && { authorization }) },
+    body: payload,
+  })
+
+  const responseBody = await response.text()
+  return new Response(responseBody, {
+    status: response.status,
+    headers: {
+      "Content-Type": response.headers.get("Content-Type") ?? "application/json",
+    },
+  })
+}
+
+
 export async function GET(request: Request) {
   try {
     const sourceUrl = new URL(SOURCE_URL)
